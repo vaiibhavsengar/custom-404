@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - System Route Lost | Sengar Industries & Production</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS for Base Utilities -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sengar: {
+                            bg: '#07090e',
+                            card: 'rgba(13, 18, 28, 0.75)',
+                            border: 'rgba(38, 52, 78, 0.4)',
+                            cyan: '#00f0ff',
+                            blue: '#1d73f5',
+                            emerald: '#10b981',
+                            amber: '#f59e0b',
+                            red: '#ff3b5c',
+                            text: '#f1f5f9',
+                            muted: '#64748b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- GSAP for Smooth Animation Engine -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <style>
+        /* Custom Styles & Engine Overrides */
+        :root {
+            --bg-grid-color: rgba(255, 255, 255, 0.03);
+            --accent-glow: rgba(0, 240, 255, 0.15);
+            --red-glow: rgba(255, 59, 92, 0.25);
+        }
+
+        body {
+            background-color: #07090e;
+            color: #f1f5f9;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Subtle Technical Background Grid */
+        .bg-grid {
+            background-image: 
+                linear-gradient(to right, var(--bg-grid-color) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--bg-grid-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 85%);
+        }
+
+        /* Glowing Ambient Vignette */
+        .ambient-glow {
+            background: radial-gradient(circle at 50% 45%, rgba(0, 240, 255, 0.06) 0%, rgba(29, 115, 245, 0.03) 35%, transparent 70%);
+        }
+
+        /* Glassmorphism Panel */
+        .glass-panel {
+            background: rgba(13, 18, 28, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 240, 255, 0.12);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* Interactive Circuit Lines Pulse */
+        .circuit-line {
+            stroke-dasharray: 8 8;
+            animation: circuitFlow 30s linear infinite;
+        }
+
+        @keyframes circuitFlow {
+            from { stroke-dashoffset: 1000; }
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Scanline Overlay */
+        .scanbeam {
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 240, 255, 0.08) 50%, transparent 100%);
+            height: 120px;
+            width: 100%;
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* CTA Animated Border Gradient */
+        .btn-glow {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(90deg, #00f0ff, #1d73f5, #10b981, #00f0ff);
+            border-radius: 8px;
+            z-index: -1;
+            opacity: 0.4;
+            transition: opacity 0.3s ease;
+            background-size: 300% 100%;
+            animation: borderGlow 6s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 300% 0%; }
+        }
+
+        .btn-glow:hover::before {
+            opacity: 1;
+            filter: blur(4px);
+        }
+
+        /* Disconnected Broken Path Pulse Effect */
+        .broken-path {
+            stroke-dasharray: 6 6;
+            animation: brokenPulse 1.8s ease-in-out infinite alternate;
+        }
+
+        @keyframes brokenPulse {
+            0% { stroke: #ff3b5c; stroke-width: 1.5; opacity: 0.4; }
+            100% { stroke: #ff3b5c; stroke-width: 2.5; opacity: 1; filter: drop-shadow(0 0 6px rgba(255,59,92,0.8)); }
+        }
+
+        /* Data Packet Motion Base */
+        .data-packet {
+            transform-origin: center;
+            filter: drop-shadow(0 0 4px #00f0ff);
+        }
+
+        /* Custom Focus Styles for Keyboard Accessibility */
+        *:focus-visible {
+            outline: 2px solid #00f0ff;
+            outline-offset: 4px;
+        }
+
+        /* Reduced Motion Fallback */
+        @media (prefers-reduced-motion: reduce) {
+            .circuit-line, .scanbeam, .broken-path, .btn-glow::before {
+                animation: none !important;
+            }
+            .data-packet {
+                display: none !important;
+            }
+        }
+
+        /* Interactive System Transition Screen Overlay */
+        .transition-overlay {
+            pointer-events: none;
+            opacity: 0;
+            background: radial-gradient(circle at center, rgba(0,240,255,0.2) 0%, rgba(7,9,14,0.95) 70%);
+        }
+    </style>
+</head>
+<body class="relative min-h-screen flex flex-col justify-between items-center select-none overflow-x-hidden">
+
+    <!-- Background Layers -->
+    <div class="fixed inset-0 bg-grid z-0 pointer-events-none"></div>
+    <div class="fixed inset-0 ambient-glow z-0 pointer-events-none"></div>
+    <div id="scanbeam" class="scanbeam z-10"></div>
+
+    <!-- Navigation Overlay / Header Branding -->
+    <header class="w-full max-w-7xl mx-auto px-6 py-6 md:py-8 flex items-center justify-between z-20 relative">
+        <a href="/" class="group flex items-center gap-3 focus:outline-none" aria-label="Sengar Industries & Production Home">
+            <!-- Dynamic Micro Status Symbol -->
+            <div class="relative w-7 h-7 flex items-center justify-center">
+                <span class="absolute inset-0 rounded-sm border border-sengar-cyan/40 group-hover:border-sengar-cyan transition-colors"></span>
+                <span class="w-2 h-2 bg-sengar-cyan rounded-full animate-ping opacity-75"></span>
+                <span class="w-1.5 h-1.5 bg-sengar-cyan rounded-full"></span>
+            </div>
+            <div class="flex flex-col">
+                <span class="font-mono font-bold text-lg tracking-widest text-white leading-none group-hover:text-sengar-cyan transition-colors">SENGAR</span>
+                <span class="font-mono text-[10px] tracking-widest text-sengar-muted mt-1 uppercase">Industries &amp; Production</span>
+            </div>
+        </a>
+
+        <!-- System Status Badge -->
+        <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full glass-panel border border-sengar-border text-xs font-mono">
+            <span class="w-2 h-2 rounded-full bg-sengar-red animate-pulse"></span>
+            <span class="text-sengar-muted">NET_STATUS:</span>
+            <span class="text-sengar-red font-medium">ROUTE_DISCONNECTED</span>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main id="parallax-container" class="w-full max-w-7xl mx-auto px-4 sm:px-6 flex-1 flex flex-col items-center justify-center relative z-20 my-4 md:my-0">
+        
+        <!-- Technical Breadcrumb Tag -->
+        <div id="boot-tag" class="opacity-0 translate-y-3 mb-2 flex items-center gap-2 font-mono text-xs text-sengar-cyan tracking-wider uppercase bg-sengar-cyan/5 px-3 py-1 rounded-md border border-sengar-cyan/20">
+            <svg class="w-3.5 h-3.5 animate-spin" style="animation-duration: 8s;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m0 14v1m8-8h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"/>
+            </svg>
+            <span>SENGAR // DIGITAL INFRASTRUCTURE // NODE_404</span>
+        </div>
+
+        <!-- Hero Graphic 404 Vector Display -->
+        <div id="hero-vector" class="w-full max-w-4xl relative flex items-center justify-center my-2 cursor-pointer group" title="Click to trigger system network re-scan">
+            
+            <!-- SVG Vector Engine -->
+            <svg class="w-full h-auto max-h-[340px] md:max-h-[420px] overflow-visible" viewBox="0 0 900 400" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animated 404 Vector Graphic with Disconnected Central Portal">
+                
+                <defs>
+                    <!-- Linear & Radial Gradients -->
+                    <linearGradient id="numGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+                        <stop offset="50%" stop-color="#cbd5e1" stop-opacity="0.8"/>
+                        <stop offset="100%" stop-color="#475569" stop-opacity="0.4"/>
+                    </linearGradient>
+
+                    <linearGradient id="cyanLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.1"/>
+                        <stop offset="50%" stop-color="#00f0ff" stop-opacity="0.8"/>
+                        <stop offset="100%" stop-color="#1d73f5" stop-opacity="0.2"/>
+                    </linearGradient>
+
+                    <radialGradient id="portalGlow" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.25"/>
+                        <stop offset="60%" stop-color="#1d73f5" stop-opacity="0.08"/>
+                        <stop offset="100%" stop-color="#07090e" stop-opacity="0"/>
+                    </radialGradient>
+
+                    <!-- Subtle Glitch / Glow Filter -->
+                    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="4" result="blur"/>
+                        <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                    </filter>
+                </defs>
+
+                <!-- Background Auxiliary Grid Vectors -->
+                <g class="opacity-30">
+                    <line x1="50" y1="200" x2="850" y2="200" stroke="#26344e" stroke-width="1" stroke-dasharray="4 8" />
+                    <line x1="450" y1="30" x2="450" y2="370" stroke="#26344e" stroke-width="1" stroke-dasharray="4 8" />
+                    <circle cx="450" cy="200" r="180" stroke="#26344e" stroke-width="1" stroke-dasharray="2 6"/>
+                    <circle cx="450" cy="200" r="140" stroke="#00f0ff" stroke-width="0.5" stroke-opacity="0.2"/>
+                </g>
+
+                <!-- 404 Left Number - Digits Built from Engineering Paths -->
+                <g id="digit-first" class="draw-element">
+                    <!-- Outer Construction Structure -->
+                    <path d="M 160 100 L 160 250 L 250 250 M 250 100 L 250 300" stroke="url(#numGrad)" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path d="M 160 100 L 160 250 L 250 250 M 250 100 L 250 300" stroke="#00f0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.8"/>
+                    <!-- Technical Nodes & Specs -->
+                    <circle cx="160" cy="100" r="5" fill="#00f0ff"/>
+                    <circle cx="250" cy="100" r="5" fill="#00f0ff"/>
+                    <circle cx="250" cy="300" r="5" fill="#00f0ff"/>
+                    <line x1="140" y1="100" x2="180" y2="100" stroke="#00f0ff" stroke-width="1"/>
+                </g>
+
+                <!-- CENTRAL "0" PORTAL NETWORK -->
+                <g id="portal-core">
+                    <!-- Outer Portal Ring -->
+                    <circle cx="450" cy="200" r="105" fill="url(#portalGlow)"/>
+                    <circle cx="450" cy="200" r="105" stroke="url(#numGrad)" stroke-width="24" fill="none"/>
+                    <circle id="portal-ring-outer" cx="450" cy="200" r="122" stroke="#00f0ff" stroke-width="1.5" stroke-dasharray="12 20 8 15" fill="none" opacity="0.6"/>
+                    <circle id="portal-ring-inner" cx="450" cy="200" r="85" stroke="#1d73f5" stroke-width="1" stroke-dasharray="6 12" fill="none" opacity="0.5"/>
+
+                    <!-- Network Nodes inside the '0' Portal -->
+                    <!-- Central Master Node -->
+                    <circle id="center-node" cx="450" cy="200" r="10" fill="#07090e" stroke="#00f0ff" stroke-width="3" filter="url(#glow)"/>
+                    <circle cx="450" cy="200" r="4" fill="#00f0ff"/>
+
+                    <!-- Peripheral Connected Nodes -->
+                    <circle class="net-node" cx="390" cy="160" r="5" fill="#10b981"/>
+                    <circle class="net-node" cx="510" cy="160" r="5" fill="#00f0ff"/>
+                    <circle class="net-node" cx="510" cy="240" r="5" fill="#00f0ff"/>
+                    <circle class="net-node" cx="390" cy="240" r="5" fill="#f59e0b"/>
+
+                    <!-- Healthy Active Network Lines inside Portal -->
+                    <path id="path-1" class="circuit-line" d="M 450 200 L 390 160" stroke="#10b981" stroke-width="1.5" opacity="0.8"/>
+                    <path id="path-2" class="circuit-line" d="M 450 200 L 510 160" stroke="#00f0ff" stroke-width="1.5" opacity="0.8"/>
+                    <path id="path-3" class="circuit-line" d="M 450 200 L 510 240" stroke="#00f0ff" stroke-width="1.5" opacity="0.8"/>
+
+                    <!-- DISCONNECTED / BROKEN ROUTE (Key Storytelling Feature) -->
+                    <path id="broken-route" class="broken-path" d="M 450 200 L 415 222 M 400 232 L 390 240" stroke="#ff3b5c" stroke-width="2" stroke-linecap="round"/>
+                    
+                    <!-- Disconnected Target Indicator Box -->
+                    <g transform="translate(390, 240)">
+                        <circle cx="0" cy="0" r="9" stroke="#ff3b5c" stroke-width="1" fill="none" class="animate-ping" style="animation-duration: 3s;"/>
+                        <line x1="-4" y1="-4" x2="4" y2="4" stroke="#ff3b5c" stroke-width="1.5"/>
+                        <line x1="4" y1="-4" x2="-4" y2="4" stroke="#ff3b5c" stroke-width="1.5"/>
+                    </g>
+
+                    <!-- Pulsing Data Packets Traveling along healthy paths -->
+                    <circle id="packet-1" class="data-packet" cx="0" cy="0" r="3" fill="#00f0ff"/>
+                    <circle id="packet-2" class="data-packet" cx="0" cy="0" r="3" fill="#10b981"/>
+
+                    <!-- Technical Callout Labels inside Central Artwork -->
+                    <text x="450" y="340" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="11" letter-spacing="2">PORTAL_GATEWAY // 010101</text>
+                    <text x="340" y="270" text-anchor="end" fill="#ff3b5c" font-family="JetBrains Mono" font-size="10" letter-spacing="1">ERR_ROUTE_NULL</text>
+                </g>
+
+                <!-- 404 Right Number -->
+                <g id="digit-second" class="draw-element">
+                    <path d="M 640 100 L 640 250 L 730 250 M 730 100 L 730 300" stroke="url(#numGrad)" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path d="M 640 100 L 640 250 L 730 250 M 730 100 L 730 300" stroke="#00f0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.8"/>
+                    <circle cx="640" cy="100" r="5" fill="#00f0ff"/>
+                    <circle cx="730" cy="100" r="5" fill="#00f0ff"/>
+                    <circle cx="730" cy="300" r="5" fill="#00f0ff"/>
+                    <line x1="710" y1="300" x2="750" y2="300" stroke="#00f0ff" stroke-width="1"/>
+                </g>
+
+                <!-- External Infrastructure Connection Lines -->
+                <path d="M 50 200 C 100 200, 110 100, 160 100" stroke="url(#cyanLineGrad)" stroke-width="1.5" fill="none"/>
+                <path d="M 730 250 C 780 250, 800 200, 850 200" stroke="url(#cyanLineGrad)" stroke-width="1.5" fill="none"/>
+            </svg>
+        </div>
+
+        <!-- Typography Messages -->
+        <div class="text-center max-w-xl mx-auto space-y-3 mt-2 mb-6">
+            <h1 id="error-title" class="opacity-0 translate-y-4 text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white">
+                SYSTEM ROUTE LOST
+            </h1>
+            <p id="error-desc" class="opacity-0 translate-y-4 text-sm sm:text-base text-sengar-muted font-normal max-w-md mx-auto leading-relaxed">
+                The requested digital path has become disconnected from Sengar's primary infrastructure matrix.
+            </p>
+        </div>
+
+        <!-- Diagnostic Panel & CTA Section -->
+        <div class="w-full max-w-2xl flex flex-col md:flex-row items-center justify-between gap-6 my-2">
+            
+            <!-- Technical Diagnostic Panel -->
+            <div id="diag-panel" class="opacity-0 translate-y-4 w-full md:w-auto flex-1 glass-panel rounded-xl p-4 sm:p-5 font-mono text-xs text-sengar-muted border border-sengar-border relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-sengar-cyan/5 rounded-full filter blur-xl pointer-events-none"></div>
+                
+                <!-- Panel Header -->
+                <div class="flex items-center justify-between border-b border-sengar-border/50 pb-2 mb-3">
+                    <span class="text-sengar-cyan font-semibold tracking-wider flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-sengar-cyan rounded-full"></span>
+                        SYSTEM DIAGNOSTIC LOG
+                    </span>
+                    <span class="text-[10px] text-sengar-muted/70">ID: SG-404-NET</span>
+                </div>
+
+                <!-- Diagnostic Matrix -->
+                <div class="grid grid-cols-2 gap-y-2 gap-x-4">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-sengar-muted uppercase">SYSTEM</span>
+                        <span class="text-sengar-text font-medium">SENGAR NETWORK</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-sengar-muted uppercase">STATUS</span>
+                        <span class="text-sengar-red font-medium flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 bg-sengar-red rounded-full animate-ping"></span>
+                            ROUTE_NOT_FOUND
+                        </span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-sengar-muted uppercase">HTTP REQUEST</span>
+                        <span class="text-sengar-text font-medium">404 / UNMAPPED</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-sengar-muted uppercase">LATENCY / PING</span>
+                        <span id="diag-ping" class="text-sengar-emerald font-medium">12ms [STABLE]</span>
+                    </div>
+                </div>
+
+                <!-- Interactive Diagnostic Reconnect Action -->
+                <div class="mt-3 pt-2 border-t border-sengar-border/40 flex items-center justify-between text-[11px]">
+                    <span class="text-sengar-muted">BROKEN ROUTE ATTEMPT:</span>
+                    <button id="retry-btn" class="text-sengar-cyan hover:underline focus:outline-none cursor-pointer flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        <span id="retry-text">TEST_RECONNECT</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Primary Action CTA Button -->
+            <div id="cta-container" class="opacity-0 translate-y-4 w-full md:w-auto flex flex-col items-center">
+                <a href="/" id="cta-btn" class="btn-glow w-full md:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-sengar-bg rounded-lg text-sengar-text font-mono text-sm font-semibold tracking-wider uppercase border border-sengar-cyan/30 hover:border-sengar-cyan transition-all duration-300 focus:outline-none cursor-pointer group">
+                    <svg class="w-4 h-4 text-sengar-cyan group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    <span>RETURN TO SYSTEM</span>
+                    <span class="w-2 h-2 bg-sengar-cyan rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                </a>
+                <span class="text-[10px] font-mono text-sengar-muted mt-2">NAVIGATE TO MAIN INFRASTRUCTURE</span>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer Technical Bar -->
+    <footer class="w-full max-w-7xl mx-auto px-6 py-4 z-20 relative flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono text-sengar-muted border-t border-sengar-border/30 gap-2">
+        <div class="flex items-center gap-4">
+            <span>&copy; <span id="year">2026</span> SENGAR INDUSTRIES &amp; PRODUCTION</span>
+            <span class="hidden md:inline text-sengar-border">|</span>
+            <span class="hidden md:inline">PRECISION DIGITAL ENGINEERING</span>
+        </div>
+        <div class="flex items-center gap-3">
+            <span class="inline-block w-2 h-2 rounded-full bg-sengar-emerald"></span>
+            <span>CORE_NODES: ONLINE</span>
+            <span class="text-sengar-border">|</span>
+            <span id="system-uptime">UPTIME: 99.99%</span>
+        </div>
+    </footer>
+
+    <!-- Interactive System Transition Overlay -->
+    <div id="transition-overlay" class="fixed inset-0 transition-overlay z-50 flex items-center justify-center">
+        <div class="font-mono text-sengar-cyan text-sm tracking-widest uppercase flex items-center gap-3 bg-sengar-bg px-6 py-3 rounded-lg border border-sengar-cyan/40 shadow-2xl">
+            <span class="w-2 h-2 bg-sengar-cyan rounded-full animate-ping"></span>
+            REROUTING TO PRIMARY INFRASTRUCTURE...
+        </div>
+    </div>
+
+    <!-- Animation & Logic Engine -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set dynamic current year
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // Setup GSAP Animations
+            const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // Scanbeam scanning beam loop
+            if (!isReducedMotion) {
+                gsap.to('#scanbeam', {
+                    y: '100vh',
+                    duration: 6,
+                    repeat: -1,
+                    ease: 'none',
+                    delay: 1
+                });
+            }
+
+            // Portal Rings continuous rotation
+            if (!isReducedMotion) {
+                gsap.to('#portal-ring-outer', {
+                    rotation: 360,
+                    transformOrigin: '50% 50%',
+                    duration: 40,
+                    repeat: -1,
+                    ease: 'none'
+                });
+
+                gsap.to('#portal-ring-inner', {
+                    rotation: -360,
+                    transformOrigin: '50% 50%',
+                    duration: 25,
+                    repeat: -1,
+                    ease: 'none'
+                });
+            }
+
+            // Continuous Data Packet Animation along paths
+            function initDataPackets() {
+                if (isReducedMotion) return;
+
+                // Packet 1 moving center to node 1
+                gsap.fromTo('#packet-1', 
+                    { cx: 450, cy: 200, opacity: 1 },
+                    { cx: 510, cy: 160, opacity: 0.2, duration: 2.2, repeat: -1, ease: 'power1.inOut' }
+                );
+
+                // Packet 2 moving center to green node
+                gsap.fromTo('#packet-2', 
+                    { cx: 450, cy: 200, opacity: 1 },
+                    { cx: 390, cy: 160, opacity: 0.2, duration: 1.8, repeat: -1, ease: 'power1.inOut', delay: 0.5 }
+                );
+            }
+
+            // GSAP Master Boot Sequence Timeline
+            const bootTimeline = gsap.timeline({
+                defaults: { ease: 'power3.out' }
+            });
+
+            bootTimeline
+                .to('#boot-tag', { opacity: 1, y: 0, duration: 0.6, delay: 0.2 })
+                .fromTo('#digit-first', 
+                    { opacity: 0, scale: 0.9, transformOrigin: 'center' },
+                    { opacity: 1, scale: 1, duration: 0.8 }, '-=0.3')
+                .fromTo('#portal-core', 
+                    { opacity: 0, scale: 0.7, transformOrigin: 'center' },
+                    { opacity: 1, scale: 1, duration: 1, ease: 'back.out(1.4)' }, '-=0.6')
+                .fromTo('#digit-second', 
+                    { opacity: 0, scale: 0.9, transformOrigin: 'center' },
+                    { opacity: 1, scale: 1, duration: 0.8 }, '-=0.8')
+                .to('#error-title', { opacity: 1, y: 0, duration: 0.6 }, '-=0.4')
+                .to('#error-desc', { opacity: 1, y: 0, duration: 0.6 }, '-=0.4')
+                .to('#diag-panel', { opacity: 1, y: 0, duration: 0.6 }, '-=0.4')
+                .to('#cta-container', { opacity: 1, y: 0, duration: 0.6, onComplete: initDataPackets }, '-=0.4');
+
+            // Interactive Parallax Movement (Desktop Only)
+            const parallaxContainer = document.getElementById('parallax-container');
+            if (window.innerWidth > 768 && !isReducedMotion) {
+                document.addEventListener('mousemove', (e) => {
+                    const { clientX, clientY } = e;
+                    const xPercent = (clientX / window.innerWidth - 0.5) * 2;
+                    const yPercent = (clientY / window.innerHeight - 0.5) * 2;
+
+                    gsap.to('#hero-vector', {
+                        x: xPercent * 12,
+                        y: yPercent * 12,
+                        duration: 1,
+                        ease: 'power2.out'
+                    });
+
+                    gsap.to('#diag-panel', {
+                        x: xPercent * -8,
+                        y: yPercent * -8,
+                        duration: 1.2,
+                        ease: 'power2.out'
+                    });
+                });
+            }
+
+            // Interactive Click Scan Trigger on Hero Vector Artwork
+            const heroVector = document.getElementById('hero-vector');
+            heroVector.addEventListener('click', () => {
+                if (isReducedMotion) return;
+
+                // Flash central portal node
+                gsap.to('#center-node', {
+                    scale: 2,
+                    stroke: '#00f0ff',
+                    duration: 0.2,
+                    yoyo: true,
+                    repeat: 1,
+                    transformOrigin: 'center'
+                });
+
+                // Pulse diagnostic ping latency string
+                const pingEl = document.getElementById('diag-ping');
+                pingEl.textContent = 'SCANNING...';
+                pingEl.className = 'text-sengar-amber font-medium';
+
+                setTimeout(() => {
+                    const pings = [11, 14, 9, 12];
+                    const randomPing = pings[Math.floor(Math.random() * pings.length)];
+                    pingEl.textContent = `${randomPing}ms [STABLE]`;
+                    pingEl.className = 'text-sengar-emerald font-medium';
+                }, 800);
+            });
+
+            // Interactive Retry Reconnect Simulation
+            const retryBtn = document.getElementById('retry-btn');
+            const retryText = document.getElementById('retry-text');
+            const brokenPath = document.getElementById('broken-route');
+
+            retryBtn.addEventListener('click', () => {
+                retryText.textContent = 'CONNECTING...';
+                
+                // Animate broken path attempting to connect
+                gsap.to(brokenPath, {
+                    stroke: '#00f0ff',
+                    strokeWidth: 3,
+                    duration: 0.3,
+                    repeat: 5,
+                    yoyo: true,
+                    onComplete: () => {
+                        retryText.textContent = 'FAILED (404)';
+                        gsap.set(brokenPath, { stroke: '#ff3b5c', strokeWidth: 2 });
+                        setTimeout(() => {
+                            retryText.textContent = 'TEST_RECONNECT';
+                        }, 2000);
+                    }
+                });
+            });
+
+            // CTA Button Navigation Experience
+            const ctaBtn = document.getElementById('cta-btn');
+            const transitionOverlay = document.getElementById('transition-overlay');
+
+            ctaBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetUrl = ctaBtn.getAttribute('href');
+
+                // Animate Interface Out / Transition In
+                gsap.to(transitionOverlay, {
+                    opacity: 1,
+                    duration: 0.5,
+                    onStart: () => {
+                        transitionOverlay.style.pointerEvents = 'all';
+                    },
+                    onComplete: () => {
+                        // Navigate to target route
+                        window.location.href = targetUrl;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
